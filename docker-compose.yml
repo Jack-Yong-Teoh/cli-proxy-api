@@ -1,0 +1,63 @@
+services:
+  cpa:
+    image: ${CPA_IMAGE:-eceasy/cli-proxy-api:latest}
+    pull_policy: always
+    build:
+      context: ./cpa
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${VERSION:-dev}
+        COMMIT: ${COMMIT:-none}
+        BUILD_DATE: ${BUILD_DATE:-unknown}
+    container_name: cpa
+    environment:
+      DEPLOY: ${DEPLOY:-}
+    ports:
+      - "8317:8317"
+      - "8085:8085"
+      - "1455:1455"
+      - "54545:54545"
+      - "51121:51121"
+      - "11451:11451"
+    volumes:
+      - ${CPA_CONFIG_PATH:-./cpa/config.yaml}:/CLIProxyAPI/config.yaml
+      - ${CPA_AUTH_PATH:-./cpa/auths}:/root/.cli-proxy-api
+      - ${CPA_LOG_PATH:-./cpa/logs}:/CLIProxyAPI/logs
+    restart: unless-stopped
+    networks:
+      - cpa_net
+
+  # drission-scraper:
+  #   build:
+  #     context: ./drission-scraper
+  #     dockerfile: Dockerfile
+  #   container_name: drission-scraper
+  #   depends_on:
+  #     - cpa
+  #   environment:
+  #     HEADLESS: ${HEADLESS:-true}
+  #     FLOW_MODE: ${FLOW_MODE:-open_temp_mail_only}
+  #     SIGNUP_URL: ${SIGNUP_URL:-}
+  #     TEMP_MAIL_URL: ${TEMP_MAIL_URL:-https://mail.chatgpt.org.uk}
+  #     TEMP_EMAIL_SELECTOR: ${TEMP_EMAIL_SELECTOR:-}
+  #     TEMP_EMAIL_BODY_SELECTOR: ${TEMP_EMAIL_BODY_SELECTOR:-}
+  #     SIGNUP_EMAIL_SELECTOR: ${SIGNUP_EMAIL_SELECTOR:-}
+  #     SIGNUP_SEND_CODE_SELECTOR: ${SIGNUP_SEND_CODE_SELECTOR:-}
+  #     SIGNUP_CODE_SELECTOR: ${SIGNUP_CODE_SELECTOR:-}
+  #     SIGNUP_NAME_SELECTOR: ${SIGNUP_NAME_SELECTOR:-}
+  #     SIGNUP_BIRTHDAY_SELECTOR: ${SIGNUP_BIRTHDAY_SELECTOR:-}
+  #     SIGNUP_SUBMIT_SELECTOR: ${SIGNUP_SUBMIT_SELECTOR:-}
+  #     PROFILE_NAME: ${PROFILE_NAME:-Test User}
+  #     PROFILE_BIRTHDAY: ${PROFILE_BIRTHDAY:-1990-01-01}
+  #     EMAIL_CODE_REGEX: ${EMAIL_CODE_REGEX:-(\d{6})}
+  #     EMAIL_WAIT_TIMEOUT_SECONDS: ${EMAIL_WAIT_TIMEOUT_SECONDS:-120}
+  #     EMAIL_POLL_SECONDS: ${EMAIL_POLL_SECONDS:-5}
+  #     MAX_SIGNUPS: ${MAX_SIGNUPS:-1}
+  #     BETWEEN_SIGNUP_DELAY_SECONDS: ${BETWEEN_SIGNUP_DELAY_SECONDS:-15}
+  #   restart: unless-stopped
+  #   networks:
+  #     - cpa_net
+
+networks:
+  cpa_net:
+    driver: bridge
