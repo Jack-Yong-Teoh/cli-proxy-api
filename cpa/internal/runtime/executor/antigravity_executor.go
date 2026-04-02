@@ -43,12 +43,15 @@ const (
 	antigravityCountTokensPath     = "/v1internal:countTokens"
 	antigravityStreamPath          = "/v1internal:streamGenerateContent"
 	antigravityGeneratePath        = "/v1internal:generateContent"
-	antigravityClientID            = os.Getenv("ANTIGRAVITY_CLIENT_ID")
-	antigravityClientSecret        = os.Getenv("ANTIGRAVITY_CLIENT_SECRET")
 	defaultAntigravityAgent        = "antigravity/1.19.6 darwin/arm64"
 	antigravityAuthType            = "antigravity"
 	refreshSkew                    = 3000 * time.Second
 	// systemInstruction              = "You are Antigravity, a powerful agentic AI coding assistant designed by the Google Deepmind team working on Advanced Agentic Coding.You are pair programming with a USER to solve their coding task. The task may require creating a new codebase, modifying or debugging an existing codebase, or simply answering a question.**Absolute paths only****Proactiveness**"
+)
+
+var (
+	antigravityClientID     = os.Getenv("ANTIGRAVITY_CLIENT_ID")
+	antigravityClientSecret = os.Getenv("ANTIGRAVITY_CLIENT_SECRET")
 )
 
 var (
