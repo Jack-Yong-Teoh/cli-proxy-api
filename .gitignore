@@ -29,6 +29,9 @@ auths/*
 cpa/auths/*
 !cpa/auths/.gitkeep
 
+# Local environment variables (do not commit)
+cpa/.env
+
 # Scraper runtime data
 drission-scraper/data/*
 !drission-scraper/data/.gitkeep
